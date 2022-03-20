@@ -1,4 +1,4 @@
-# graph-sequencer
+# @pnpm/graph-sequencer
 
 > Sort items in a graph using a topological sort while resolving cycles with
 > priority groups.
@@ -68,7 +68,7 @@ dependencies remaining which will often break cycles.
 All together that looks like this:
 
 ```js
-const graphSequencer = require('graph-sequencer');
+const graphSequencer = require('@pnpm/graph-sequencer');
 
 graphSequencer({
   graph: new Map([

@@ -1,10 +1,9 @@
 {
-  "name": "graph-sequencer",
-  "version": "2.0.0",
+  "name": "@pnpm/graph-sequencer",
+  "version": "0.0.0",
   "description": "Sort items in a graph using a topological sort while resolving cycles with priority groups",
   "main": "index.js",
-  "author": "James Kyle <me@thejameskyle.com>",
-  "repository": "thejameskyle/graph-sequencer",
+  "repository": "pnpm/graph-sequencer",
   "license": "MIT",
   "keywords": [
     "graph",
