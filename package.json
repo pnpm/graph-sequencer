@@ -24,10 +24,6 @@
   "scripts": {
     "test": "ava test.js"
   },
-  "dependencies": {
-    "array-flatten": "^2.1.1",
-    "array-includes": "^3.0.3"
-  },
   "devDependencies": {
     "ava": "^0.24.0",
     "flow-bin": "^0.60.1"

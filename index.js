@@ -2,8 +2,6 @@
 'use strict';
 
 const assert = require('assert');
-const arrayFlatten = require('array-flatten');
-const arrayIncludes = require('array-includes');
 
 /*::
 type Graph<T> = Map<T, Array<T>>;
@@ -52,7 +50,7 @@ function getCycles/*::<T>*/(currDepsMap /*: Graph<T> */, visited /*: Graph<T> */
 
       // If an item hasn't been visited, visit it (and pass an updated
       // potential cycle)
-      if (!arrayIncludes(visitedDeps, dep)) {
+      if (!visitedDeps.includes(dep)) {
         visitedDeps.push(dep);
         visit(dep, cycle.concat(dep));
       }
@@ -76,7 +74,7 @@ function graphSequencer/*::<T>*/(opts /*: Options<T> */) /*: Result<T> */ {
   // Ensure that we have the same set of items in both graph and groups.
   assert.deepStrictEqual(
     graphItems.sort(),
-    arrayFlatten(groups).sort(),
+    groups.flat(Infinity).sort(),
     'items in graph must be the same as items in groups'
   );
 
@@ -110,12 +108,12 @@ function graphSequencer/*::<T>*/(opts /*: Options<T> */) /*: Result<T> */ {
       if (typeof deps === 'undefined') continue;
 
       // Find the index of the group that the `item` belongs to.
-      let itemGroup = groups.findIndex(group => arrayIncludes(group, item));
+      let itemGroup = groups.findIndex(group => group.includes(item));
 
       // Filter down a set of deps which need to be run first.
       let currDeps = deps.filter(dep => {
         // Find the index of the group that the `dep` belongs to.
-        let depGroup = groups.findIndex(group => arrayIncludes(group, dep));
+        let depGroup = groups.findIndex(group => group.includes(dep));
 
         if (depGroup > itemGroup) {
           return false;
