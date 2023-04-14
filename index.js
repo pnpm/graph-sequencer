@@ -69,6 +69,7 @@ function getCycles/*::<T>*/(currDepsMap /*: Graph<T> */, visited /*: Graph<T> */
 function graphSequencer/*::<T>*/(opts /*: Options<T> */) /*: Result<T> */ {
   let graph = opts.graph;
   let groups = opts.groups;
+  let groupsAsSets = groups.map(group => new Set(group));
   let graphItems = Array.from(graph.keys());
 
   // Ensure that we have the same set of items in both graph and groups.
@@ -108,12 +109,12 @@ function graphSequencer/*::<T>*/(opts /*: Options<T> */) /*: Result<T> */ {
       if (typeof deps === 'undefined') continue;
 
       // Find the index of the group that the `item` belongs to.
-      let itemGroup = groups.findIndex(group => group.includes(item));
+      let itemGroup = groupsAsSets.findIndex(group => group.has(item));
 
       // Filter down a set of deps which need to be run first.
       let currDeps = deps.filter(dep => {
         // Find the index of the group that the `dep` belongs to.
-        let depGroup = groups.findIndex(group => group.includes(dep));
+        let depGroup = groupsAsSets.findIndex(group => group.has(dep));
 
         if (depGroup > itemGroup) {
           return false;
