@@ -1,10 +1,8 @@
-// @flow
 'use strict';
-const test = require('ava');
 const graphSequencer = require('./');
 
-test('graph with no dependencies', t => {
-  t.deepEqual(
+test('graph with no dependencies', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', []],
@@ -13,7 +11,8 @@ test('graph with no dependencies', t => {
         ['d', []],
       ]),
       groups: [['a', 'b', 'c', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: true,
       chunks: [['a', 'b', 'c', 'd']],
@@ -22,8 +21,8 @@ test('graph with no dependencies', t => {
   );
 });
 
-test('graph with multiple dependencies on one item', t => {
-  t.deepEqual(
+test('graph with multiple dependencies on one item', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['d']],
@@ -32,7 +31,8 @@ test('graph with multiple dependencies on one item', t => {
         ['d', []],
       ]),
       groups: [['a', 'b', 'c', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: true,
       chunks: [['c', 'd'], ['a', 'b']],
@@ -41,8 +41,8 @@ test('graph with multiple dependencies on one item', t => {
   );
 });
 
-test('graph with resolved cycle', t => {
-  t.deepEqual(
+test('graph with resolved cycle', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['b']],
@@ -51,7 +51,8 @@ test('graph with resolved cycle', t => {
         ['d', ['a']],
       ]),
       groups: [['a'], ['b', 'c', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: true,
       chunks: [['a'], ['d'], ['c'], ['b']],
@@ -60,8 +61,8 @@ test('graph with resolved cycle', t => {
   );
 });
 
-test('graph with resolved cycle with multiple unblocked deps', t => {
-  t.deepEqual(
+test('graph with resolved cycle with multiple unblocked deps', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['d']],
@@ -70,7 +71,8 @@ test('graph with resolved cycle with multiple unblocked deps', t => {
         ['d', ['a']],
       ]),
       groups: [['d'], ['a', 'b', 'c']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: true,
       chunks: [['d'], ['a', 'b', 'c']],
@@ -79,8 +81,8 @@ test('graph with resolved cycle with multiple unblocked deps', t => {
   );
 });
 
-test('graph with unresolved cycle', t => {
-  t.deepEqual(
+test('graph with unresolved cycle', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['b']],
@@ -89,7 +91,8 @@ test('graph with unresolved cycle', t => {
         ['d', ['a']],
       ]),
       groups: [['a', 'b', 'c', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: false,
       chunks: [['a'], ['d'], ['c'], ['b']],
@@ -98,8 +101,8 @@ test('graph with unresolved cycle', t => {
   );
 });
 
-test('graph with multiple cycles', t => {
-  t.deepEqual(
+test('graph with multiple cycles', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['b']],
@@ -108,7 +111,8 @@ test('graph with multiple cycles', t => {
         ['d', ['c']],
       ]),
       groups: [['a', 'b', 'c', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: false,
       chunks: [['a'], ['b'], ['c'], ['d']],
@@ -117,8 +121,8 @@ test('graph with multiple cycles', t => {
   );
 });
 
-test('graph with multiple cycles where one is resolved', t => {
-  t.deepEqual(
+test('graph with multiple cycles where one is resolved', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['b']],
@@ -127,7 +131,8 @@ test('graph with multiple cycles where one is resolved', t => {
         ['d', ['c']],
       ]),
       groups: [['a', 'b', 'c'], ['d']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: false,
       chunks: [['c'], ['d'], ['a'], ['b']],
@@ -136,8 +141,8 @@ test('graph with multiple cycles where one is resolved', t => {
   );
 });
 
-test('graph with multiple resolves cycles', t => {
-  t.deepEqual(
+test('graph with multiple resolves cycles', () => {
+  expect(
     graphSequencer({
       graph: new Map([
         ['a', ['b']],
@@ -146,7 +151,8 @@ test('graph with multiple resolves cycles', t => {
         ['d', ['c']],
       ]),
       groups: [['b', 'c'], ['a', 'd']],
-    }),
+    })
+  ).toStrictEqual(
     {
       safe: true,
       chunks: [['b', 'c'], ['a', 'd']],

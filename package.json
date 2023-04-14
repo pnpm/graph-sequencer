@@ -22,10 +22,9 @@
     "index.js"
   ],
   "scripts": {
-    "test": "ava test.js"
+    "test": "jest"
   },
   "devDependencies": {
-    "ava": "^0.24.0",
-    "flow-bin": "^0.60.1"
+    "jest": "^29.5.0"
   }
 }
