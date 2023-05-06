@@ -43,7 +43,7 @@ function getCycles/*::<T>*/(currDepsMap /*: Graph<T> */, visited /*: Graph<T> */
     // For each dep,
     for (let dep of deps) {
       // Skip if this dep has already been visited.
-      if(visitedDeps.includes(dep)) {
+      if (visitedDeps.includes(dep)) {
         continue;
       }
 
