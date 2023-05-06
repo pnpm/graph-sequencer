@@ -99,6 +99,64 @@ test('graph with unresolved cycle', () => {
       cycles: [['a', 'b', 'c', 'd']],
     },
   );
+
+  expect(
+    graphSequencer({
+      graph: new Map([
+        ['a', ['c']],
+        ['b', ['c']],
+        ['c', ['b']],
+      ]),
+      groups: [
+        ['a', 'b', 'c'],
+      ],
+    })
+  ).toStrictEqual(
+    {
+      safe: false,
+      chunks: [['a'], ['b'], ['c']],
+      cycles: [['c', 'b']],
+    },
+  );
+
+  expect(
+    graphSequencer({
+      graph: new Map([
+        ['a', ['c', 'd']],
+        ['b', ['c']],
+        ['c', ['b']],
+        ['d', ['b', 'a', 'd']],
+      ]),
+      groups: [
+        ['a', 'b', 'c', 'd'],
+      ],
+    })
+  ).toStrictEqual(
+    {
+      safe: false,
+      chunks: [['b'], ['c'], ['a'], ['d']],
+      cycles: [['c', 'b'], ['a', 'd'], ['d']],
+    },
+  );
+
+  expect(
+    graphSequencer({
+      graph: new Map([
+        ['a', ['c', 'd']],
+        ['b', ['a']],
+        ['c', ['b']],
+        ['d', ['e']],
+        ['e', ['a']],
+      ]),
+      groups: [['a', 'b', 'c', 'd', 'e']],
+    })
+  ).toStrictEqual(
+    {
+      safe: false,
+      chunks: [['b'], ['c'], ['d'], ['a'], ['e'] ],
+      cycles: [['a', 'c', 'b'], ['a', 'd', 'e'] ],
+    }
+  )
 });
 
 test('graph with multiple cycles', () => {
@@ -160,3 +218,4 @@ test('graph with multiple resolves cycles', () => {
     },
   );
 });
+

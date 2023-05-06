@@ -42,18 +42,23 @@ function getCycles/*::<T>*/(currDepsMap /*: Graph<T> */, visited /*: Graph<T> */
 
     // For each dep,
     for (let dep of deps) {
-      // Check if this dep creates a cycle. We know it's a cycle if the first
-      // item is the same as our dep.
-      if (cycle[0] === dep) {
-        cycles.push(cycle);
+      // Skip if this dep has already been visited.
+      if(visitedDeps.includes(dep)) {
+        continue;
+      }
+
+      visitedDeps.push(dep);
+
+      // Check if this dep creates a cycle. We know it's a cycle If dep is already in cycle.
+      const idx = cycle.indexOf(dep);
+      if (idx > -1) {
+        cycles.push(cycle.slice(idx));
+        continue;
       }
 
       // If an item hasn't been visited, visit it (and pass an updated
       // potential cycle)
-      if (!visitedDeps.includes(dep)) {
-        visitedDeps.push(dep);
-        visit(dep, cycle.concat(dep));
-      }
+      visit(dep, cycle.concat(dep));
     }
   }
 
